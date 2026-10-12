@@ -1,0 +1,35 @@
+# Version control
+.git/
+.gitignore
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data — real data is never in the repo, but exclude any strays
+data/raw/
+data/processed/
+data/interim/
+
+# Logs and results
+*.log
+results/
+outputs/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Secrets
+.env
+*.key
+secrets.yaml
