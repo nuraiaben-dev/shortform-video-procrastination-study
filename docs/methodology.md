@@ -2,7 +2,7 @@
 
 **Project:** The Impact of Short-Form Video Content on Student Procrastination and Academic Deadline Adherence
 
-**Authors:** Nuray Aben & Akniet Abish (nuraiaben-dev)
+**Authors:** Nuray Aben (nuraiaben-dev) & Akniet Abish
 
 **Repository:** https://github.com/nuraiaben-dev/shortform-video-procrastination-study
 
