@@ -1,0 +1,75 @@
+# ============================================================
+# Experiment Configuration
+# Project: Short-Form Video and Student Procrastination
+# Repository: shortform-video-procrastination-study
+# ============================================================
+
+project:
+  name: "shortform-video-procrastination-study"
+  version: "0.1.0"
+  description: >
+    Observational study of short-form video viewing, procrastination,
+    and academic deadline adherence. Analysis pipeline on synthetic sample.
+
+# ---------- Data paths ----------
+data:
+  sample_path: "data/sample/sample_data.csv"
+  raw_dir: "data/raw/"
+  processed_dir: "data/processed/"
+  results_dir: "results/"
+
+# ---------- Observation window ----------
+observation:
+  total_days: 14              # Study duration in days
+  min_valid_days: 10          # Guardrail: minimum valid diary days for exposure analysis
+  bedtime_window_minutes: 60  # "Before bedtime" definition window
+
+# ---------- Column mapping (matches sample_data.csv schema) ----------
+columns:
+  id: "study_id"
+  viewing_minutes: "viewing_minutes"
+  study_time_viewing: "study_time_viewing"   # 1 / 0
+  bedtime_viewing: "bedtime_viewing"         # 1 / 0
+  tuckman_score: "tuckman_score"
+  tasks_due: "tasks_due"
+  late_tasks: "late_tasks"
+
+# ---------- Variable derivations ----------
+variables:
+  X:  # Mean daily viewing time (min/day) = sum(viewing_minutes) / valid_days
+    formula: "sum(viewing_minutes) / valid_days"
+  S:  # Study-time viewing proportion = count(study_time_viewing==1) / valid_days
+    formula: "sum(study_time_viewing) / valid_days"
+  B:  # Bedtime viewing proportion = count(bedtime_viewing==1) / valid_days
+    formula: "sum(bedtime_viewing) / valid_days"
+  P:  # Procrastination score (from questionnaire, one value per participant)
+    source: "tuckman_score"
+  L:  # Late tasks (count)
+    source: "late_tasks"
+  A:  # Tasks due (opportunity denominator)
+    source: "tasks_due"
+
+# ---------- Statistical analysis ----------
+analysis:
+  alpha: 0.05
+  directional: true            # H1 is directional (positive correlation / IRR > 1)
+  multiple_testing_correction: "holm"   # Applied across RQ3a and RQ3b
+  spearman:
+    alternative: "greater"     # H1: rho > 0
+  rq3_model:
+    primary: "poisson"         # Fallback: negative_binomial if overdispersed
+    fallback: "negative_binomial"
+    offset_column: "A"         # log(A) used as exposure offset
+    include_covariates: false  # Sample only has core predictors
+
+# ---------- Reproducibility ----------
+reproducibility:
+  random_seed: 42              # Fixed seed for any resampling
+  n_bootstrap: 1000            # For CI estimation if needed
+  log_file: "results/run.log"
+
+# ---------- Output ----------
+output:
+  print_summary: true
+  save_log: true
+  save_results_csv: false      # Not for the synthetic sample
