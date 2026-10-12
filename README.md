@@ -5,7 +5,7 @@
 [![Status: Protocol](https://img.shields.io/badge/status-protocol-orange.svg)](#)
 [![Reproducible](https://img.shields.io/badge/reproducibility-100%25-brightgreen.svg)](#reproducibility)
 
-**Authors:** Nuray Aben & Akniet Abish (nuraiaben-dev)  
+**Authors:** Nuray Aben (nuraiaben-dev) & Akniet Abish 
 **Course:** Research Methods — Task 2: Methodology Passport Card & Research Repository  
 **Institution:** [Narxoz]  
 **Date:** October 2026
