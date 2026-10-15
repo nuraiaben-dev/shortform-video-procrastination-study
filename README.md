@@ -263,12 +263,12 @@ The table below shows rounded median execution times.
 The executed notebook and CSV also report quartiles, mean, sample SD,
 p95, p99 and bootstrap 95% confidence intervals.
 
-| Input size (rows) | Baseline median (ms) | Proposed median (ms) | Speedup |
+| Input size (rows) | Baseline median (p25–p75), ms | Proposed median (p25–p75), ms | Speedup |
 |---:|---:|---:|---:|
-| 10 | 3.537 | 1.910 | 1.85× |
-| 100 | 3.635 | 1.929 | 1.88× |
-| 1,000 | 5.016 | 2.193 | 2.29× |
-| 10,000 | 20.647 | 4.852 | 4.26× |
+| 10 | 3.537 (3.517–3.571) | 1.910 (1.903–1.920) | 1.85× |
+| 100 | 3.635 (3.622–3.658) | 1.929 (1.921–1.938) | 1.88× |
+| 1,000 | 5.016 (4.991–5.171) | 2.193 (2.176–2.291) | 2.29× |
+| 10,000 | 20.647 (20.481–21.025) | 4.852 (4.797–4.975) | 4.26× |
 
 Speedup is the baseline median divided by the proposed median.
 
