@@ -5,7 +5,7 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-
+import subprocess
 import numpy as np
 import pandas as pd
 import yaml
@@ -26,6 +26,29 @@ def timestamp():
         timespec="microseconds"
     )
 
+
+def mac_hardware():
+    def read_sysctl(key):
+        try:
+            return subprocess.check_output(
+                ["sysctl", "-n", key],
+                text=True,
+                stderr=subprocess.DEVNULL,
+            ).strip()
+        except (OSError, subprocess.CalledProcessError):
+            return None
+
+    cpu = read_sysctl("machdep.cpu.brand_string")
+    ram_bytes = read_sysctl("hw.memsize")
+
+    return {
+        "cpu_model": cpu or "not reported",
+        "ram_gib": (
+            round(int(ram_bytes) / (1024 ** 3), 2)
+            if ram_bytes and ram_bytes.isdigit()
+            else None
+        ),
+    }
 
 def main():
     parser = argparse.ArgumentParser()
@@ -148,7 +171,7 @@ def main():
         "target_function": "derive_participant_level",
         "python": sys.version,
         "os": platform.platform(),
-        "cpu": platform.processor() or "not reported",
+        **mac_hardware(),
         "logical_cpu_count": __import__("os").cpu_count(),
         "numpy": np.__version__,
         "pandas": pd.__version__,
