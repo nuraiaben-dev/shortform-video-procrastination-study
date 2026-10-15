@@ -1,9 +1,10 @@
 {
-  "timestamp_utc": "2026-10-15T06:49:12.735090+00:00",
+  "timestamp_utc": "2026-10-15T07:03:15.917255+00:00",
   "target_function": "derive_participant_level",
   "python": "3.11.9 | packaged by conda-forge | (main, Apr 19 2024, 18:34:54) [Clang 16.0.6 ]",
   "os": "macOS-15.4.1-arm64-arm-64bit",
-  "cpu": "arm",
+  "cpu_model": "Apple M1",
+  "ram_gib": 8.0,
   "logical_cpu_count": 8,
   "numpy": "1.26.4",
   "pandas": "2.2.2",

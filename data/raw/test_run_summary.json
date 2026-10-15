@@ -4,8 +4,8 @@
   "failed_runs": 0,
   "error_rate": 0.0,
   "latency_scope": "successful measured runs only",
-  "mean_ms": 3.69287873,
-  "median_ms": 3.646917,
-  "p95_ms": 3.9339809499999996,
-  "p99_ms": 4.045828250000003
+  "mean_ms": 3.51957496,
+  "median_ms": 3.516458,
+  "p95_ms": 3.5519621999999997,
+  "p99_ms": 3.56595208
 }
