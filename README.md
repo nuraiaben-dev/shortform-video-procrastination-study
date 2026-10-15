@@ -222,10 +222,10 @@ All 100 measured runs completed successfully.
 |---|---:|
 | Successful runs | 100 |
 | Failed runs | 0 |
-| Mean | 3.693 ms |
-| Median | 3.647 ms |
-| p95 | 3.934 ms |
-| p99 | 4.046 ms |
+| Mean | 3.520 ms |
+| Median | 3.516 ms |
+| p95 | 3.552 ms |
+| p99 | 3.566 ms |
 
 These timings describe one local test on synthetic data.
 They are not findings about student behaviour.
