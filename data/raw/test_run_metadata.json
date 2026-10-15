@@ -1,0 +1,93 @@
+{
+  "timestamp_utc": "2026-10-15T06:49:12.735090+00:00",
+  "target_function": "derive_participant_level",
+  "python": "3.11.9 | packaged by conda-forge | (main, Apr 19 2024, 18:34:54) [Clang 16.0.6 ]",
+  "os": "macOS-15.4.1-arm64-arm-64bit",
+  "cpu": "arm",
+  "logical_cpu_count": 8,
+  "numpy": "1.26.4",
+  "pandas": "2.2.2",
+  "pyyaml": "6.0.1",
+  "input_path": "/Users/nurayaben/shortform-video-procrastination-study/data/sample/sample_data.csv",
+  "input_rows": 10,
+  "warmup_runs": 10,
+  "measured_runs": 100,
+  "random_seed": 42,
+  "config": {
+    "project": {
+      "name": "shortform-video-procrastination-study",
+      "version": "0.1.0",
+      "description": "Observational study of short-form video viewing, procrastination, and academic deadline adherence. Analysis pipeline on synthetic sample.\n"
+    },
+    "data": {
+      "sample_path": "data/sample/sample_data.csv",
+      "raw_dir": "data/raw/",
+      "processed_dir": "data/processed/",
+      "results_dir": "results/"
+    },
+    "observation": {
+      "total_days": 14,
+      "min_valid_days": 10,
+      "bedtime_window_minutes": 60
+    },
+    "columns": {
+      "id": "study_id",
+      "viewing_minutes": "viewing_minutes",
+      "study_time_viewing": "study_time_viewing",
+      "bedtime_viewing": "bedtime_viewing",
+      "tuckman_score": "tuckman_score",
+      "tasks_due": "tasks_due",
+      "late_tasks": "late_tasks"
+    },
+    "variables": {
+      "X": {
+        "formula": "sum(viewing_minutes) / valid_days"
+      },
+      "S": {
+        "formula": "sum(study_time_viewing) / valid_days"
+      },
+      "B": {
+        "formula": "sum(bedtime_viewing) / valid_days"
+      },
+      "P": {
+        "source": "tuckman_score"
+      },
+      "L": {
+        "source": "late_tasks"
+      },
+      "A": {
+        "source": "tasks_due"
+      }
+    },
+    "analysis": {
+      "alpha": 0.05,
+      "directional": true,
+      "multiple_testing_correction": "holm",
+      "spearman": {
+        "alternative": "greater"
+      },
+      "rq3_model": {
+        "primary": "poisson",
+        "fallback": "negative_binomial",
+        "offset_column": "A",
+        "include_covariates": false
+      }
+    },
+    "reproducibility": {
+      "random_seed": 42,
+      "n_bootstrap": 1000,
+      "log_file": "results/run.log"
+    },
+    "output": {
+      "print_summary": true,
+      "save_log": true,
+      "save_results_csv": false
+    },
+    "benchmark": {
+      "warmup_runs": 10,
+      "measured_runs": 100,
+      "input_path": "data/sample/sample_data.csv",
+      "output_path": "data/raw/test_run.jsonl"
+    }
+  }
+}
