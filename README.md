@@ -240,3 +240,94 @@ Timings may differ across machines and runs.
 
 Only synthetic benchmark outputs are committed.
 Real participant data must remain excluded from Git.
+
+## Task 3 Results and Discussion
+
+### Experimental setup
+
+We compared two implementations of participant-level diary aggregation:
+
+- **Baseline:** separate grouped aggregations followed by table merges.
+- **Proposed:** one grouped aggregation producing the same variables.
+
+Both methods were tested on 10, 100, 1,000 and 10,000 synthetic rows.
+Outputs matched for every workload before timing.
+
+Each method completed 10 warm-up and 100 measured runs per workload.
+Warm-up runs were excluded from final statistics. Method order was
+randomized within paired repetitions. All 800 measured runs succeeded.
+
+### Results
+
+The table below shows rounded median execution times.
+The executed notebook and CSV also report quartiles, mean, sample SD,
+p95, p99 and bootstrap 95% confidence intervals.
+
+| Input size (rows) | Baseline median (ms) | Proposed median (ms) | Speedup |
+|---:|---:|---:|---:|
+| 10 | 3.537 | 1.910 | 1.85× |
+| 100 | 3.635 | 1.929 | 1.88× |
+| 1,000 | 5.016 | 2.193 | 2.29× |
+| 10,000 | 20.647 | 4.852 | 4.26× |
+
+Speedup is the baseline median divided by the proposed median.
+
+The proposed method had lower median execution time at every tested
+input size. Its relative advantage was largest at 10,000 rows.
+Both methods had an observed error rate of 0% in this experiment.
+
+### Scientific figures
+
+![Median execution time and bootstrap 95% confidence intervals](reports/figures/fig1_latency_vs_load.png)
+
+![Execution-time distributions and median confidence intervals](reports/figures/fig2_distribution_boxplot.png)
+
+Vector exports:
+[Figure 1 PDF](reports/figures/fig1_latency_vs_load.pdf) |
+[Figure 2 PDF](reports/figures/fig2_distribution_boxplot.pdf)
+
+### Reproduce the analysis
+
+After installing and activating the project environment:
+
+```bash
+python src/process_data.py
+python src/visualize.py
+jupyter notebook notebooks/01_data_analysis.ipynb
+```
+
+The notebook is saved with sequentially executed cells and visible outputs.
+
+To collect a new comparison log:
+
+```bash
+python src/compare_benchmark.py --config configs/config.yaml
+```
+
+This command overwrites the comparison log. Re-run processing and
+visualization afterwards; numerical results may differ.
+
+### Domain model
+
+See the [component diagram and measurement boundaries](docs/domain_model.md).
+
+### Limitations
+
+The experiment used one computer and repeated synthetic sample data.
+Increasing workload size increased both row count and participant-group
+count. Their effects were not isolated.
+
+Bootstrap intervals use 5,000 resamples with seed 42 and describe
+within-session uncertainty under an independent-run assumption.
+They do not capture differences across machines or separate sessions.
+With 100 measurements per group, p99 estimates are approximate.
+
+These results evaluate software performance. They do not test the
+behavioural hypotheses about short-form videos and student procrastination.
+
+### Analysis artifacts
+
+- [Executed notebook](notebooks/01_data_analysis.ipynb)
+- [Full statistical summary](data/processed/metrics_summary.csv)
+- [Comparison measurements](data/raw/comparison_run.jsonl)
+- [Experiment metadata](data/raw/comparison_run_metadata.json)
