@@ -73,3 +73,9 @@ output:
   print_summary: true
   save_log: true
   save_results_csv: false      # Not for the synthetic sample
+
+benchmark:
+  warmup_runs: 10
+  measured_runs: 100
+  input_path: "data/sample/sample_data.csv"
+  output_path: "data/raw/test_run.jsonl"
