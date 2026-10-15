@@ -194,3 +194,49 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 1. Tuckman, B. W. (1991). The Development and Concurrent Validity of the Procrastination Scale. *Educational and Psychological Measurement*, 51(2), 473–480. https://doi.org/10.1177/0013164491512022
 2. Microsoft Learn. Microsoft Threat Modeling Tool threats. https://learn.microsoft.com/azure/security/develop/threat-modeling-tool-threats
 3. FIRST. CVSS v4.0 User Guide. https://www.first.org/cvss/user-guide.html
+
+## Week 7 Benchmark
+
+The benchmark measures the execution time of
+`derive_participant_level` on the 10-row synthetic sample.
+CSV reading, file writing and console output are outside
+the timed section.
+
+### Run
+
+With the project environment installed:
+
+```bash
+conda activate shortform-study
+python src/benchmark.py --config configs/config.yaml
+```
+
+Settings are stored in `configs/config.yaml`.
+
+### Test results
+
+10 warm-up runs were excluded from summary statistics.
+All 100 measured runs completed successfully.
+
+| Metric | Value |
+|---|---:|
+| Successful runs | 100 |
+| Failed runs | 0 |
+| Mean | 3.693 ms |
+| Median | 3.647 ms |
+| p95 | 3.934 ms |
+| p99 | 4.046 ms |
+
+These timings describe one local test on synthetic data.
+They are not findings about student behaviour.
+Timings may differ across machines and runs.
+
+### Output files
+
+- `data/raw/test_run.jsonl`: individual measurements,
+  labelled as warm-up or measurement.
+- `data/raw/test_run_metadata.json`: environment and configuration.
+- `data/raw/test_run_summary.json`: summary statistics.
+
+Only synthetic benchmark outputs are committed.
+Real participant data must remain excluded from Git.
