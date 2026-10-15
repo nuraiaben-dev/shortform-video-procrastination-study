@@ -79,3 +79,10 @@ benchmark:
   measured_runs: 100
   input_path: "data/sample/sample_data.csv"
   output_path: "data/raw/test_run.jsonl"
+
+comparison:
+  warmup_runs: 10
+  measured_runs: 100
+  sample_copies: [1, 10, 100, 1000]
+  input_path: "data/sample/sample_data.csv"
+  output_path: "data/raw/comparison_run.jsonl"
