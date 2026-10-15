@@ -1,0 +1,116 @@
+{
+  "timestamp_utc": "2026-10-15T15:36:18.897169+00:00",
+  "experiment": "baseline_vs_proposed_aggregation",
+  "data_type": "repeated synthetic sample",
+  "workload_note": "Sample copies have unique participant IDs. This tests input size and group-count scaling, not real student behaviour.",
+  "methods": {
+    "baseline": "analyze.derive_participant_level",
+    "proposed": "aggregation.derive_participant_level_proposed"
+  },
+  "equivalence_check": "passed for all workloads",
+  "python": "3.11.9 | packaged by conda-forge | (main, Apr 19 2024, 18:34:54) [Clang 16.0.6 ]",
+  "os": "macOS-15.4.1-arm64-arm-64bit",
+  "cpu_model": "Apple M1",
+  "ram_gib": 8.0,
+  "numpy": "1.26.4",
+  "pandas": "2.2.2",
+  "pyyaml": "6.0.1",
+  "random_seed": 42,
+  "workload_order": [
+    1000,
+    100,
+    10,
+    1
+  ],
+  "input_sha256": "1ea49bee646a2bf4448ef431415e8930f0c467d64bac5ad5b83e36edca0d2936",
+  "git_commit": "cb3d3b45504e432dd59d865d3622e54d90f56df2",
+  "config": {
+    "project": {
+      "name": "shortform-video-procrastination-study",
+      "version": "0.1.0",
+      "description": "Observational study of short-form video viewing, procrastination, and academic deadline adherence. Analysis pipeline on synthetic sample.\n"
+    },
+    "data": {
+      "sample_path": "data/sample/sample_data.csv",
+      "raw_dir": "data/raw/",
+      "processed_dir": "data/processed/",
+      "results_dir": "results/"
+    },
+    "observation": {
+      "total_days": 14,
+      "min_valid_days": 10,
+      "bedtime_window_minutes": 60
+    },
+    "columns": {
+      "id": "study_id",
+      "viewing_minutes": "viewing_minutes",
+      "study_time_viewing": "study_time_viewing",
+      "bedtime_viewing": "bedtime_viewing",
+      "tuckman_score": "tuckman_score",
+      "tasks_due": "tasks_due",
+      "late_tasks": "late_tasks"
+    },
+    "variables": {
+      "X": {
+        "formula": "sum(viewing_minutes) / valid_days"
+      },
+      "S": {
+        "formula": "sum(study_time_viewing) / valid_days"
+      },
+      "B": {
+        "formula": "sum(bedtime_viewing) / valid_days"
+      },
+      "P": {
+        "source": "tuckman_score"
+      },
+      "L": {
+        "source": "late_tasks"
+      },
+      "A": {
+        "source": "tasks_due"
+      }
+    },
+    "analysis": {
+      "alpha": 0.05,
+      "directional": true,
+      "multiple_testing_correction": "holm",
+      "spearman": {
+        "alternative": "greater"
+      },
+      "rq3_model": {
+        "primary": "poisson",
+        "fallback": "negative_binomial",
+        "offset_column": "A",
+        "include_covariates": false
+      }
+    },
+    "reproducibility": {
+      "random_seed": 42,
+      "n_bootstrap": 1000,
+      "log_file": "results/run.log"
+    },
+    "output": {
+      "print_summary": true,
+      "save_log": true,
+      "save_results_csv": false
+    },
+    "benchmark": {
+      "warmup_runs": 10,
+      "measured_runs": 100,
+      "input_path": "data/sample/sample_data.csv",
+      "output_path": "data/raw/test_run.jsonl"
+    },
+    "comparison": {
+      "warmup_runs": 10,
+      "measured_runs": 100,
+      "sample_copies": [
+        1,
+        10,
+        100,
+        1000
+      ],
+      "input_path": "data/sample/sample_data.csv",
+      "output_path": "data/raw/comparison_run.jsonl"
+    }
+  }
+}
