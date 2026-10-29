@@ -2,7 +2,7 @@
 
 ### 4.1 Formal Definitions of Metrics
 
-All timing measurements are reported in milliseconds (ms). For each experimental condition, we collect $n = 100$ measured runs after discarding $n_{warmup} = 10$ warm-up runs. Let $x_1, \dots, x_n$ denote the execution times of the measured runs.
+All timing measurements are reported in milliseconds (ms). For each experimental condition, we collect $n = 100$ measured runs after discarding $n_{warmup} = 10$ warm-up runs. Let $x_1, \dots, x_n$ denote the execution times of the measured runs. The formal definition of the median and aggregated metrics (percentiles, confidence intervals, and speedup) are provided in the equations below.
 
 **Median execution time.** The median is the 50th percentile of the measured execution times:
 
@@ -38,6 +38,8 @@ A value $S > 1$ indicates that the proposed method is faster than the baseline; 
 
 ### 4.2 Notation Table
 
+Table 1 summarizes the symbols used in the formal definitions above.
+
 | Symbol | Description | Type |
 |---|---|---|
 | $n$ | Number of measured runs per condition | scalar (integer) |
@@ -52,8 +54,7 @@ A value $S > 1$ indicates that the proposed method is faster than the baseline; 
 
 ### 4.3 Baseline vs. Proposed: Execution-Time Comparison
 
-Table 1 reports the median execution time of the baseline and proposed aggregation methods, together with the interquartile range (p25–p75) and the relative speedup $S$, for each input size. All timings are in milliseconds (ms). Warm-up runs (10) are excluded; each cell is based on 100 measured runs. The best (lowest) median per row is shown in **bold**.
-
+<a id="table1"></a>
 **Table 1.** Median execution time (ms) with interquartile range (p25–p75) and speedup for baseline and proposed aggregation methods across four input sizes. Best median per row in **bold**.
 
 | Input rows | Baseline median (ms) | Proposed median (ms) | Speedup $S$ |
