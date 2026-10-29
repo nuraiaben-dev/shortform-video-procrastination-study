@@ -34,11 +34,11 @@ For each resample $b \in \{1, \dots, B\}$ we compute the bootstrap median
 $\hat{\theta}^{*}_{b}$. The 95% confidence interval is
 
 $$
-\mathrm{CI}_{95\%} = \left[ \hat{\theta}^{*}_{(0.025)},\ \hat{\theta}^{*}_{(0.975)} \right],
+\text{CI}_{95\%} = [ \hat{\theta}^{*}_{(0.025)},\ \hat{\theta}^{*}_{(0.975)} ],
 $$
 
 where $\hat{\theta}^{*}_{(q)}$ denotes the $q$-th quantile of the
-bootstrap distribution $\{\hat{\theta}^{*}_{1}, \dots, \hat{\theta}^{*}_{B}\}$.
+bootstrap distribution.
 
 **Speedup ratio.** The speedup of the proposed method over the baseline
 is defined as the ratio of their median execution times:
@@ -64,7 +64,7 @@ is 4.26 times faster.
 | $B$ | Number of bootstrap resamples | scalar (integer) |
 | $\hat{\theta}^{*}_{b}$ | Bootstrap median from resample $b$ (ms) | scalar |
 | $\hat{\theta}^{*}_{(q)}$ | $q$-th quantile of the bootstrap distribution | scalar |
-| $\mathrm{CI}_{95\%}$ | Bootstrap 95% confidence interval for the median | interval |
+| $\text{CI}_{95\%}$ | Bootstrap 95% confidence interval for the median | interval |
 | $\mathcal{S}$ | Speedup ratio (baseline / proposed) | scalar (dimensionless) |
 
 ### 4.3 Baseline vs. Proposed: Execution-Time Comparison
