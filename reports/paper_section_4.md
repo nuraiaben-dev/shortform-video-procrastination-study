@@ -69,31 +69,20 @@ Table 1 summarizes the symbols used in the formal definitions above.
 
 ### 4.4 Visual Comparison
 
-Figure 1 shows the median execution time as a function of input size
-(logarithmic x-axis). Figure 2 shows the full execution-time
-distributions for each method and input size. Both figures are exported
-as vector PDF (for print) and 300 DPI PNG (for screen); source files are
-available in `reports/figures/`.
+The quantitative results from [Table 1](#table1) are visualized in the figures below. Figure 1 shows the median execution time as a function of input size. Figure 2 shows the full execution-time distributions for each method.
 
+<a id="figure1"></a>
 ![Figure 1](figures/fig1_latency_vs_load.png)
 
-**Figure 1.** Median execution time (ms) versus input size (logarithmic
-scale) for the baseline and proposed aggregation methods. Vertical bars
-represent bootstrap 95% confidence intervals for the median ($B = 5000$
-resamples, seed $= 42$). The proposed method has a lower median at every
-tested input size; the gap widens with input size, reaching a 4.26×
-speedup at 10,000 rows. The shaded bars indicate that the median is
-estimated precisely within each session, but they do not capture
-variation across machines or sessions.
+**Figure 1.** Median execution time (ms) versus input size (logarithmic scale) for the baseline and proposed aggregation methods. Vertical bars represent bootstrap 95% confidence intervals for the median ($B = 5000$ resamples, seed = 42). The proposed method has a lower median at every tested input size; the gap widens with input size, reaching a 4.26× speedup at 10,000 rows. The shaded bars indicate that the median is estimated precisely within each session, but they do not capture variation across machines or sessions.
 
+<a id="figure2"></a>
 ![Figure 2](figures/fig2_distribution_boxplot.png)
 
-**Figure 2.** Distribution of execution time (ms) for the baseline and
-proposed methods across four input sizes. Each box represents the
-interquartile range (p25–p75); whiskers extend to the most extreme
-observations within 1.5×IQR of the box; points beyond the whiskers are
-retained as outliers. Offset markers and bars show medians and their
-bootstrap 95% confidence intervals. Each panel uses its own vertical
-scale to accommodate the growth in execution time with input size. The
-baseline exhibits a longer upper tail at 10,000 rows (p99 ≈ 33 ms),
-whereas the proposed method remains tightly concentrated (p99 ≈ 5.9 ms).
+**Figure 2.** Distribution of execution time (ms) for the baseline and proposed methods across four input sizes. Each box represents the interquartile range (p25–p75); whiskers extend to the most extreme observations within 1.5×IQR of the box; points beyond the whiskers are retained as outliers. Offset markers and bars show medians and their bootstrap 95% confidence intervals. Each panel uses its own vertical scale to accommodate the growth in execution time with input size. The baseline exhibits a longer upper tail at 10,000 rows (p99 ≈ 33 ms), whereas the proposed method remains tightly concentrated (p99 ≈ 5.9 ms).
+
+### 4.5 Discussion and Limitations
+
+As shown in [Table 1](#table1), the proposed aggregation method consistently outperforms the baseline in terms of execution time. At 10,000 rows, the median execution time drops from 20.647 ms to 4.852 ms, corresponding to a 4.26× speedup. Furthermore, [Figure 2](#figure2) demonstrates that the proposed method is more stable: the baseline's 99th percentile reaches approximately 33 ms due to outliers, whereas the proposed method remains below 6 ms.
+
+However, these results concern computational performance on synthetic data in a single session on one machine. They do not establish a behavioral association between short-form video use and student procrastination. The pipeline is simply validated as a fast and reproducible tool for future analysis of real participant data.
