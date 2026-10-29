@@ -11,7 +11,7 @@ denote the execution times of the measured runs.
 measured execution times:
 
 $$
-\operatorname{median}(x) =
+\text{median}(x) =
 \begin{cases}
 x_{(\frac{n+1}{2})}, & n \text{ odd}, \\[4pt]
 \dfrac{x_{(n/2)} + x_{(n/2+1)}}{2}, & n \text{ even},
@@ -44,7 +44,7 @@ bootstrap distribution $\{\hat{\theta}^{*}_{1}, \dots, \hat{\theta}^{*}_{B}\}$.
 is defined as the ratio of their median execution times:
 
 $$
-\mathcal{S} = \frac{\operatorname{median}(x^{\text{baseline}})}{\operatorname{median}(x^{\text{proposed}})}.
+\mathcal{S} = \frac{\text{median}(x^{\text{baseline}})}{\text{median}(x^{\text{proposed}})}.
 $$
 
 A value $\mathcal{S} > 1$ indicates that the proposed method is faster
@@ -67,7 +67,6 @@ is 4.26 times faster.
 | $\mathrm{CI}_{95\%}$ | Bootstrap 95% confidence interval for the median | interval |
 | $\mathcal{S}$ | Speedup ratio (baseline / proposed) | scalar (dimensionless) |
 
-
 ### 4.3 Baseline vs. Proposed: Execution-Time Comparison
 
 Table 1 reports the median execution time of the baseline and proposed
@@ -88,7 +87,7 @@ across four input sizes. Best median per row in **bold**.
 | 1,000 | 5.016 (4.992–5.171) | **2.193** (2.176–2.291) | 2.29× |
 | 10,000 | 20.647 (20.481–21.025) | **4.852** (4.797–4.975) | **4.26×** |
 
-*Note.* Speedup is defined as $\mathcal{S} = \operatorname{median}(x^{\text{baseline}}) / \operatorname{median}(x^{\text{proposed}})$, following Eq. (4). A value $\mathcal{S} > 1$ indicates that the proposed method is faster. Both methods produced matching outputs on every tested workload; all 800 measured runs completed without errors (error rate = 0%).
+*Note.* Speedup is defined as $\mathcal{S} = \text{median}(x^{\text{baseline}}) / \text{median}(x^{\text{proposed}})$, following Eq. (4). A value $\mathcal{S} > 1$ indicates that the proposed method is faster. Both methods produced matching outputs on every tested workload; all 800 measured runs completed without errors (error rate = 0%).
 
 
 ### 4.4 Visual Comparison
