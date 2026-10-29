@@ -66,3 +66,26 @@ is 4.26 times faster.
 | $\hat{\theta}^{*}_{(q)}$ | $q$-th quantile of the bootstrap distribution | scalar |
 | $\mathrm{CI}_{95\%}$ | Bootstrap 95% confidence interval for the median | interval |
 | $\mathcal{S}$ | Speedup ratio (baseline / proposed) | scalar (dimensionless) |
+
+
+### 4.3 Baseline vs. Proposed: Execution-Time Comparison
+
+Table 1 reports the median execution time of the baseline and proposed
+aggregation methods, together with the interquartile range (p25–p75) and
+the relative speedup $\mathcal{S}$, for each input size. All timings are
+in milliseconds (ms). Warm-up runs ($n_{\text{warmup}} = 10$) are excluded;
+each cell is based on $n = 100$ measured runs. The best (lowest) median
+per row is shown in **bold**; the second-best is shown in *italics*.
+
+**Table 1.** Median execution time (ms) with interquartile range
+(p25–p75) and speedup for baseline and proposed aggregation methods
+across four input sizes. Best median per row in **bold**.
+
+| Input rows | Baseline median (ms) | Proposed median (ms) | Speedup $\mathcal{S}$ |
+|---:|---:|---:|---:|
+| 10 | 3.537 (3.517–3.571) | **1.910** (1.903–1.920) | 1.85× |
+| 100 | 3.635 (3.622–3.658) | **1.929** (1.921–1.938) | 1.88× |
+| 1,000 | 5.016 (4.992–5.171) | **2.193** (2.176–2.291) | 2.29× |
+| 10,000 | 20.647 (20.481–21.025) | **4.852** (4.797–4.975) | **4.26×** |
+
+*Note.* Speedup is defined as $\mathcal{S} = \operatorname{median}(x^{\text{baseline}}) / \operatorname{median}(x^{\text{proposed}})$, following Eq. (4). A value $\mathcal{S} > 1$ indicates that the proposed method is faster. Both methods produced matching outputs on every tested workload; all 800 measured runs completed without errors (error rate = 0%).
