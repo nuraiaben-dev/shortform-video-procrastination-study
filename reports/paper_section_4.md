@@ -89,3 +89,35 @@ across four input sizes. Best median per row in **bold**.
 | 10,000 | 20.647 (20.481–21.025) | **4.852** (4.797–4.975) | **4.26×** |
 
 *Note.* Speedup is defined as $\mathcal{S} = \operatorname{median}(x^{\text{baseline}}) / \operatorname{median}(x^{\text{proposed}})$, following Eq. (4). A value $\mathcal{S} > 1$ indicates that the proposed method is faster. Both methods produced matching outputs on every tested workload; all 800 measured runs completed without errors (error rate = 0%).
+
+
+### 4.4 Visual Comparison
+
+Figure 1 shows the median execution time as a function of input size
+(logarithmic x-axis). Figure 2 shows the full execution-time
+distributions for each method and input size. Both figures are exported
+as vector PDF (for print) and 300 DPI PNG (for screen); source files are
+available in `reports/figures/`.
+
+![Figure 1](figures/fig1_latency_vs_load.png)
+
+**Figure 1.** Median execution time (ms) versus input size (logarithmic
+scale) for the baseline and proposed aggregation methods. Vertical bars
+represent bootstrap 95% confidence intervals for the median ($B = 5000$
+resamples, seed $= 42$). The proposed method has a lower median at every
+tested input size; the gap widens with input size, reaching a 4.26×
+speedup at 10,000 rows. The shaded bars indicate that the median is
+estimated precisely within each session, but they do not capture
+variation across machines or sessions.
+
+![Figure 2](figures/fig2_distribution_boxplot.png)
+
+**Figure 2.** Distribution of execution time (ms) for the baseline and
+proposed methods across four input sizes. Each box represents the
+interquartile range (p25–p75); whiskers extend to the most extreme
+observations within 1.5×IQR of the box; points beyond the whiskers are
+retained as outliers. Offset markers and bars show medians and their
+bootstrap 95% confidence intervals. Each panel uses its own vertical
+scale to accommodate the growth in execution time with input size. The
+baseline exhibits a longer upper tail at 10,000 rows (p99 ≈ 33 ms),
+whereas the proposed method remains tightly concentrated (p99 ≈ 5.9 ms).
