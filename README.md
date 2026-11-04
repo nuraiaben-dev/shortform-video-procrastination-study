@@ -85,7 +85,6 @@ shortform-video-procrastination-study/
 ```
 
 ---
-
 ## Quickstart & Reproducibility Guide
 
 ### Option A — Conda (Recommended)
@@ -94,7 +93,7 @@ Run the full analysis pipeline on the synthetic sample in **three commands**:
 
 ```bash
 # 1. Clone the repository and enter directory
-git clone https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git
+git clone [https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git](https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git)
 cd shortform-video-procrastination-study
 
 # 2. Create and activate environment
