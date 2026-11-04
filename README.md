@@ -102,7 +102,7 @@ conda activate procrastination-study
 
 # 3. Execute sample benchmark pipeline
 python src/benchmark.py --config configs/config.yaml
-
+```
 
 ### Option B — Docker
 
