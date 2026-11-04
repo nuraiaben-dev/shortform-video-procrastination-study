@@ -88,7 +88,19 @@ shortform-video-procrastination-study/
 
 ## Quickstart & Reproducibility Guide
 
-Run the full analysis pipeline on the synthetic sample in **three commands**.
+Run the full analysis pipeline on the synthetic sample in **three commands**:
+
+```bash
+# 1. Clone the repository and enter directory
+git clone [https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git](https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git)
+cd shortform-video-procrastination-study
+
+# 2. Create and activate environment
+conda env create -f environment.yml
+conda activate procrastination-study
+
+# 3. Execute sample benchmark pipeline
+python src/benchmark.py --config configs/config.yaml
 
 ### Option A — Conda (recommended)
 
