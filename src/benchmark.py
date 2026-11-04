@@ -221,3 +221,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+def check_guardrails(df):
+    """Verify that diary completeness matches research criteria (>=10 days)."""
+    valid_records = df[df["valid_diary_days"] >= 10]
+    print(
+        f"[INFO] Guardrail check: {len(valid_records)}/{len(df)} participants passed criteria."
+    )
+    return len(valid_records) == len(df)
