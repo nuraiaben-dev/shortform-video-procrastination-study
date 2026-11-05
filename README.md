@@ -337,7 +337,6 @@ visualization afterwards; numerical results may differ.
 ### Domain model
 
 See the [component diagram and measurement boundaries](docs/domain_model.md).
-
 ### Limitations
 
 The experiment used one computer and repeated synthetic sample data.
