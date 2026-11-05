@@ -29,7 +29,11 @@ This repository contains the research protocol, methodology passport card, and r
 
 **Study Design:** Mixed-Methods — primary quantitative observational design (14-day diary + questionnaire + device screen-time evidence), with optional qualitative follow-up interviews.
 
-**No empirical findings are claimed at this stage.** This is a protocol and reproducible pipeline.
+**No empirical findings are claimed at this stage.** The repository contains the research protocol for the
+student procrastination study and completed synthetic-data
+benchmark results for Task 3. The benchmark results evaluate
+software performance and are not empirical findings about
+student behaviour.
 
 ---
 
@@ -116,13 +120,12 @@ Run the full analysis pipeline on the synthetic sample in **three commands**:
 
 ```bash
 # 1. Clone the repository and enter directory
-git clone [https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git](https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git)
+git clone https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git
 cd shortform-video-procrastination-study
 
 # 2. Create and activate environment
 conda env create -f environment.yml
-conda activate procrastination-study
-
+conda activate shortform-study
 # 3. Execute sample benchmark pipeline
 python src/benchmark.py --config configs/config.yaml
 ```
