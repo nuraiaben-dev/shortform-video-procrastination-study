@@ -59,29 +59,52 @@ This repository contains the research protocol, methodology passport card, and r
 ```
 shortform-video-procrastination-study/
 │
-├── README.md                          # This file — overview and Quickstart
-├── LICENSE                            # MIT License
-├── .gitignore                         # Python / data-science gitignore
-├── .dockerignore                      # Docker build context exclusions
-├── environment.yml                    # Pinned dependencies (conda)
-├── Dockerfile                         # Optional containerised environment
+├── README.md
+├── LICENSE
+├── .gitignore
+├── .dockerignore
+├── environment.yml
+├── Dockerfile
 │
 ├── configs/
-│   └── config.yaml                    # Experiment parameters (window, thresholds, paths)
+│   └── config.yaml
 │
 ├── data/
-│   └── sample/
-│       └── sample_data.csv            # 10-row synthetic sample for pipeline testing
+│   ├── sample/
+│   │   └── sample_data.csv
+│   ├── raw/
+│   │   ├── test_run.jsonl
+│   │   ├── test_run_metadata.json
+│   │   ├── test_run_summary.json
+│   │   ├── comparison_run.jsonl
+│   │   └── comparison_run_metadata.json
+│   └── processed/
+│       └── metrics_summary.csv
 │
 ├── docs/
-│   ├── methodology.md                 # Methodology Passport Card (Task 2 submission)
-│   └── reproducibility_checklist.md   # 7-point reviewer audit checklist
+│   ├── methodology.md
+│   ├── domain_model.md
+│   └── reproducibility_checklist.md
 │
 ├── notebooks/
-│   └── .gitkeep                       # Placeholder for exploratory notebooks
+│   └── 01_data_analysis.ipynb
+│
+├── reports/
+│   ├── figures/
+│   │   ├── fig1_latency_vs_load.png
+│   │   ├── fig1_latency_vs_load.pdf
+│   │   ├── fig2_distribution_boxplot.png
+│   │   └── fig2_distribution_boxplot.pdf
+│   ├── paper_section_4.md
+│   └── task3_report.md
 │
 └── src/
-    └── analyze.py                     # Main analysis pipeline (Spearman + IRR model)
+    ├── aggregation.py
+    ├── analyze.py
+    ├── benchmark.py
+    ├── compare_benchmark.py
+    ├── process_data.py
+    └── visualize.py
 ```
 
 ---
