@@ -86,3 +86,14 @@ comparison:
   sample_copies: [1, 10, 100, 1000]
   input_path: "data/sample/sample_data.csv"
   output_path: "data/raw/comparison_run.jsonl"
+
+  # Advanced Research & Guardrail Settings
+guardrails:
+  min_valid_diary_days: 10
+  strict_proxy_validation: true
+  max_cpu_percent: 80
+
+statistical_params:
+  alpha: 0.05
+  correction_method: "holm"
+  rq2_test: "spearman"

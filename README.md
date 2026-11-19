@@ -5,7 +5,7 @@
 [![Status: Protocol](https://img.shields.io/badge/status-protocol-orange.svg)](#)
 [![Reproducible](https://img.shields.io/badge/reproducibility-100%25-brightgreen.svg)](#reproducibility)
 
-**Authors:** Nuray Aben (nuraiaben-dev) & Akniet Abish 
+**Authors:** Nuray Aben (nuraiaben-dev) & Akniet Abish (aknietabish-cpu)
 
 **Course:** Research Methods — Task 2: Methodology Passport Card & Research Repository  
 
@@ -29,7 +29,11 @@ This repository contains the research protocol, methodology passport card, and r
 
 **Study Design:** Mixed-Methods — primary quantitative observational design (14-day diary + questionnaire + device screen-time evidence), with optional qualitative follow-up interviews.
 
-**No empirical findings are claimed at this stage.** This is a protocol and reproducible pipeline.
+**No empirical findings are claimed at this stage.** The repository contains the research protocol for the
+student procrastination study and completed synthetic-data
+benchmark results for Task 3. The benchmark results evaluate
+software performance and are not empirical findings about
+student behaviour.
 
 ---
 
@@ -59,48 +63,71 @@ This repository contains the research protocol, methodology passport card, and r
 ```
 shortform-video-procrastination-study/
 │
-├── README.md                          # This file — overview and Quickstart
-├── LICENSE                            # MIT License
-├── .gitignore                         # Python / data-science gitignore
-├── .dockerignore                      # Docker build context exclusions
-├── environment.yml                    # Pinned dependencies (conda)
-├── Dockerfile                         # Optional containerised environment
+├── README.md
+├── LICENSE
+├── .gitignore
+├── .dockerignore
+├── environment.yml
+├── Dockerfile
 │
 ├── configs/
-│   └── config.yaml                    # Experiment parameters (window, thresholds, paths)
+│   └── config.yaml
 │
 ├── data/
-│   └── sample/
-│       └── sample_data.csv            # 10-row synthetic sample for pipeline testing
+│   ├── sample/
+│   │   └── sample_data.csv
+│   ├── raw/
+│   │   ├── test_run.jsonl
+│   │   ├── test_run_metadata.json
+│   │   ├── test_run_summary.json
+│   │   ├── comparison_run.jsonl
+│   │   └── comparison_run_metadata.json
+│   └── processed/
+│       └── metrics_summary.csv
 │
 ├── docs/
-│   ├── methodology.md                 # Methodology Passport Card (Task 2 submission)
-│   └── reproducibility_checklist.md   # 7-point reviewer audit checklist
+│   ├── methodology.md
+│   ├── domain_model.md
+│   └── reproducibility_checklist.md
 │
 ├── notebooks/
-│   └── .gitkeep                       # Placeholder for exploratory notebooks
+│   └── 01_data_analysis.ipynb
+│
+├── reports/
+│   ├── figures/
+│   │   ├── fig1_latency_vs_load.png
+│   │   ├── fig1_latency_vs_load.pdf
+│   │   ├── fig2_distribution_boxplot.png
+│   │   └── fig2_distribution_boxplot.pdf
+│   ├── paper_section_4.md
+│   └── task3_report.md
 │
 └── src/
-    └── analyze.py                     # Main analysis pipeline (Spearman + IRR model)
+    ├── aggregation.py
+    ├── analyze.py
+    ├── benchmark.py
+    ├── compare_benchmark.py
+    ├── process_data.py
+    └── visualize.py
 ```
 
 ---
-
 ## Quickstart & Reproducibility Guide
 
-Run the full analysis pipeline on the synthetic sample in **three commands**.
+### Option A — Conda (Recommended)
 
-### Option A — Conda (recommended)
+Run the full analysis pipeline on the synthetic sample in **three commands**:
 
 ```bash
-# 1. Create the environment from pinned dependencies
+# 1. Clone the repository and enter directory
+git clone https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git
+cd shortform-video-procrastination-study
+
+# 2. Create and activate environment
 conda env create -f environment.yml
-
-# 2. Activate it
 conda activate shortform-study
-
-# 3. Run the analysis on the sample data
-python src/analyze.py --config configs/config.yaml --input data/sample/sample_data.csv
+# 3. Execute sample benchmark pipeline
+python src/benchmark.py --config configs/config.yaml
 ```
 
 ### Option B — Docker
@@ -310,7 +337,6 @@ visualization afterwards; numerical results may differ.
 ### Domain model
 
 See the [component diagram and measurement boundaries](docs/domain_model.md).
-
 ### Limitations
 
 The experiment used one computer and repeated synthetic sample data.

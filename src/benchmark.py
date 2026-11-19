@@ -12,7 +12,6 @@ import yaml
 
 from analyze import derive_participant_level
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -50,6 +49,20 @@ def mac_hardware():
         ),
     }
 
+
+def check_guardrails(df):
+    """Verify that diary completeness matches research criteria (>=10 days)."""
+    # Считаем количество дней на каждого участника
+    days_per_participant = df.groupby("participant_id").size()
+    valid_participants = (days_per_participant >= 10).sum()
+    total_participants = len(days_per_participant)
+    
+    print(
+        f"[INFO] Guardrail check: {valid_participants}/{total_participants} participants passed criteria (>=10 days)."
+    )
+    return valid_participants == total_participants
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -75,8 +88,9 @@ def main():
 
     np.random.seed(seed)
 
+    # ИЗМЕНЕНИЕ 1: Жестко задаем путь к нашим новым данным
     input_path = project_path(
-        settings.get("input_path", cfg["data"]["sample_path"])
+        settings.get("input_path", "data/raw/real_data.csv")
     )
     output_path = project_path(
         settings.get("output_path", "data/raw/test_run.jsonl")
@@ -84,6 +98,10 @@ def main():
 
     # Reading the CSV is outside the timed function.
     data = pd.read_csv(input_path)
+    
+    # ИЗМЕНЕНИЕ 2: Запускаем Guardrail проверку на новых данных
+    check_guardrails(data)
+
     records = []
 
     for run in range(warmup_runs + measured_runs):
