@@ -89,14 +89,14 @@ The quantitative results from Table~\ref{tab:main} are visualized in Figures~\re
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.85\linewidth]{figures/fig1_latency_vs_load.pdf}
+\includegraphics[width=0.85\linewidth]{../reports/figures/fig1_latency_vs_load.pdf}
 \caption{Median execution time (ms) versus input size (logarithmic scale) for the baseline and proposed aggregation methods. Vertical bars represent bootstrap 95\% confidence intervals for the median ($B = 5000$ resamples, seed = 42). The proposed method has a lower median at every tested input size; the gap widens with input size, reaching a 4.26$\times$ speedup at 10{,}000 rows. The bars indicate that the median is estimated precisely within each session, but they do not capture variation across machines or sessions.}
 \label{fig:latency}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.85\linewidth]{figures/fig2_distribution_boxplot.pdf}
+\includegraphics[width=0.85\linewidth]{../reports/figures/fig2_distribution_boxplot.pdf}
 \caption{Distribution of execution time (ms) for the baseline and proposed methods across four input sizes. Each box represents the interquartile range (p25--p75); whiskers extend to the most extreme observations within 1.5$\times$IQR; points beyond the whiskers are retained as outliers. Offset markers and bars show medians and their bootstrap 95\% confidence intervals. Each panel uses its own vertical scale. The baseline exhibits a longer upper tail at 10{,}000 rows (p99 $\approx$ 33~ms), whereas the proposed method remains tightly concentrated (p99 $\approx$ 5.9~ms).}
 \label{fig:dist}
 \end{figure}
