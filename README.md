@@ -29,12 +29,7 @@ This repository contains the research protocol, methodology passport card, and r
 
 **Study Design:** Mixed-Methods — primary quantitative observational design (14-day diary + questionnaire + device screen-time evidence), with optional qualitative follow-up interviews.
 
-**No empirical findings are claimed at this stage.** The repository contains the research protocol for the
-student procrastination study and completed synthetic-data
-benchmark results for Task 3. The benchmark results evaluate
-software performance and are not empirical findings about
-student behaviour.
-
+**No empirical findings are claimed at this stage.**  This repository contains the empirical analysis of real survey data (real_data.csv) investigating the relationship between short-form video viewing habits and procrastination levels. The pipeline includes data cleaning, bootstrapped statistical aggregation, and scientific visualization.
 ---
 
 ## System Requirements & Prerequisites
@@ -186,7 +181,7 @@ It contains: research type, hypotheses H0/H1, variable matrix (independent / dep
 
 ## Data & Privacy
 
-- **This repository contains the analysis of real survey data investigating short-form video consumption and procrastination..**
+- **The real participant data (data/raw/real_data.csv) has been anonymized and pseudonymized via study IDs prior to analysis. The repository includes the processed aggregate metrics (data/processed/metrics_summary.csv) and generated figures, but does not contain any personally identifiable information (PII)..**
 - Participant records are pseudonymised via study IDs; contact information is stored separately.
 
 ---
@@ -270,14 +265,10 @@ Real participant data must remain excluded from Git.
 ## Task 3 Results and Discussion
 
 ### Experimental setup
-
-We analyzed real survey data (`data/raw/real_data.csv`) containing 2,360 records of student behaviour. The primary goal was to investigate the association between short-form video viewing time and procrastination levels. 
-
-Data processing included cleaning missing values and dividing participants into two groups based on their daily viewing time: `< 60 mins` and `>= 60 mins`. We calculated robust statistics (mean, median) and bootstrapped 95% confidence intervals (2,000 resamples, seed = 42) to quantify uncertainty. We also tracked a guardrail metric: the percentage of participants with a high procrastination score (> 50).
+We analyzed real survey data (`data/raw/real_data.csv`) containing 2,360 records of student behaviour. Data processing included cleaning missing values and dividing participants into two groups based on daily viewing time (`< 60 mins` and `>= 60 mins`). We calculated robust statistics (mean, median) and bootstrapped 95% confidence intervals (2,000 resamples, seed = 42). We also tracked a guardrail metric: the percentage of participants with a high procrastination score (> 50).
 
 ### Results
-
-The table below summarises the findings for the real dataset (values rounded):
+The table below summarises the findings:
 
 | Viewing Time Group | N (records) | Mean Score | Median Score | 95% CI (Bootstrap) | High Procrastination Rate (Guardrail) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -285,28 +276,18 @@ The table below summarises the findings for the real dataset (values rounded):
 | **>= 60 mins** | 1506 | 43.10 | 44.0 | [42.55, 43.70] | 29.22% |
 
 **Key Findings:**
-1. Participants watching short-form videos for **60 minutes or more per day** show significantly higher procrastination scores compared to those watching less than 60 minutes. The non-overlapping confidence intervals confirm this difference is statistically robust.
-2. The guardrail metric reveals a dramatic difference: the rate of high procrastination is ~83 times higher in the `>= 60 mins` group (29.22% vs 0.35%).
-3. The scatter plot (Figure 2) indicates a positive correlation between daily viewing minutes and procrastination levels.
+1. Participants watching short-form videos for **60 minutes or more per day** show significantly higher procrastination scores. The non-overlapping confidence intervals confirm this difference is statistically robust.
+2. The guardrail metric reveals a dramatic difference: the rate of high procrastination is ~83 times higher in the `>= 60 mins` group.
 
 ### Scientific figures
-
 The plots strictly follow scientific visualization standards (explicit axis units, 95% CI error bars, colorblind-safe palette, distinct markers):
-
-* ![Procrastination vs Viewing Time (with 95% CI)](reports/figures/fig1_procrastination_vs_viewing.png)
+* ![Procrastination vs Viewing Time](reports/figures/fig1_procrastination_vs_viewing.png)
 * ![Correlation Plot](reports/figures/fig2_viewing_vs_procrastination.png)
 
 Vector exports: [Figure 1 PDF](reports/figures/fig1_procrastination_vs_viewing.pdf) | [Figure 2 PDF](reports/figures/fig2_viewing_vs_procrastination.pdf)
 
 ### Domain model
-
 The component diagram and measurement boundaries are documented in [docs/domain_model.md](docs/domain_model.md).
 
 ### Limitations
-
-The analysis is based on observational self-reported data. While a significant association exists, it does not imply causation (e.g., students prone to procrastination might naturally gravitate toward more video consumption). The dataset is limited to the survey sample and does not capture long-term behavioural changes.
-
-- [Executed notebook](notebooks/01_data_analysis.ipynb)
-- [Full statistical summary](data/processed/metrics_summary.csv)
-- [Comparison measurements](data/raw/comparison_run.jsonl)
-- [Experiment metadata](data/raw/comparison_run_metadata.json)
+The analysis is based on observational self-reported data. While a significant association exists, it does not imply causation. The dataset is limited to the survey sample and does not capture long-term behavioural changes.
