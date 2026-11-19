@@ -1,0 +1,16 @@
+\section{Limitations and Threats to Validity}
+\label{sec:limitations}
+
+While the proposed pipeline demonstrates a clear performance advantage on synthetic data, several limitations must be acknowledged. Following standard practice in empirical software engineering, we categorize these threats into internal, external, and construct validity.
+
+\subsection{Internal Validity}
+The primary threat to internal validity is the use of \textbf{synthetic data}. The benchmark measures execution time on artificially generated diary records, not on real participant data. Consequently, the observed timings (e.g., 4.26$\times$ speedup at 10,000 rows) reflect algorithmic behavior under controlled conditions rather than real-world variability. Furthermore, the random seed for bootstrapping was fixed (seed = 42) to ensure reproducibility; this choice, while standard, means that confidence intervals describe within-session uncertainty and do not capture cross-session variance.
+
+\subsection{External Validity}
+The experiment was executed on a single local machine with a fixed Python environment. Results may not generalize to other operating systems, CPU architectures, or memory configurations. Additionally, the workload sizes (10 to 10,000 rows) were chosen to simulate plausible diary volumes; however, the effects of increasing row count and increasing participant-group count were not isolated, meaning we cannot attribute the speedup solely to one factor. Future work should replicate the benchmark across multiple platforms and with larger, more heterogeneous workloads.
+
+\subsection{Construct Validity}
+We measured \textbf{execution latency} as a proxy for pipeline efficiency. While latency is a standard metric in performance engineering, it does not directly measure the research outcomes of interest (procrastination and deadline adherence). The benchmark therefore evaluates the \textit{software} rather than the \textit{behavioral} hypotheses. This distinction is intentional: the goal was to validate the reproducibility and scalability of the data-processing pipeline prior to field data collection. However, readers should interpret the results as evidence of engineering readiness, not as empirical findings about student behavior.
+
+\subsection{Summary}
+In summary, the reported speedups and confidence intervals are valid within the scope of the tested workloads and environment. They do not establish causal claims about procrastination, nor do they guarantee identical performance on other systems. These limitations are inherent to the protocol stage and will be addressed in the subsequent data-collection phase.
