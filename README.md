@@ -186,8 +186,7 @@ It contains: research type, hypotheses H0/H1, variable matrix (independent / dep
 
 ## Data & Privacy
 
-- **No real participant data are stored in this repository.** Only a synthetic `data/sample/sample_data.csv` (10 rows) is committed for pipeline testing.
-- Real data (if collected in the future) will be stored under `data/raw/` and `data/processed/`, both excluded via `.gitignore`.
+- **This repository contains the analysis of real survey data investigating short-form video consumption and procrastination..**
 - Participant records are pseudonymised via study IDs; contact information is stored separately.
 
 ---
