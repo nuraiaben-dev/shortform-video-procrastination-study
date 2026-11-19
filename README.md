@@ -2,16 +2,16 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3119/)
-[![Status: Protocol](https://img.shields.io/badge/status-protocol-orange.svg)](#)
+[![Status: Completed](https://img.shields.io/badge/status-completed-brightgreen.svg)](#)
 [![Reproducible](https://img.shields.io/badge/reproducibility-100%25-brightgreen.svg)](#reproducibility)
 
 **Authors:** Nuray Aben (nuraiaben-dev) & Akniet Abish (aknietabish-cpu)
 
-**Course:** Research Methods — Task 2: Methodology Passport Card & Research Repository  
+**Course:** Research Methods — Task 2 & Task 3: Methodology Passport Card, Data Analysis & Visualization  
 
 **Institution:** [Narxoz]  
 
-**Date:** October 2026
+**Date:** November 2026
 
 ---
 
@@ -29,7 +29,8 @@ This repository contains the research protocol, methodology passport card, and r
 
 **Study Design:** Mixed-Methods — primary quantitative observational design (14-day diary + questionnaire + device screen-time evidence), with optional qualitative follow-up interviews.
 
-**No empirical findings are claimed at this stage.**  This repository contains the empirical analysis of real survey data (real_data.csv) investigating the relationship between short-form video viewing habits and procrastination levels. The pipeline includes data cleaning, bootstrapped statistical aggregation, and scientific visualization.
+This repository now includes the empirical analysis of real survey data (`data/raw/real_data.csv`) investigating the relationship between short-form video viewing habits and procrastination levels. The pipeline includes data cleaning, bootstrapped statistical aggregation, and scientific visualization.
+
 ---
 
 ## System Requirements & Prerequisites
@@ -55,28 +56,20 @@ This repository contains the research protocol, methodology passport card, and r
 
 ## Repository Structure
 
-```
+```text
 shortform-video-procrastination-study/
 │
 ├── README.md
 ├── LICENSE
 ├── .gitignore
-├── .dockerignore
 ├── environment.yml
-├── Dockerfile
 │
 ├── configs/
 │   └── config.yaml
 │
 ├── data/
-│   ├── sample/
-│   │   └── sample_data.csv
 │   ├── raw/
-│   │   ├── test_run.jsonl
-│   │   ├── test_run_metadata.json
-│   │   ├── test_run_summary.json
-│   │   ├── comparison_run.jsonl
-│   │   └── comparison_run_metadata.json
+│   │   └── real_data.csv
 │   └── processed/
 │       └── metrics_summary.csv
 │
@@ -90,204 +83,13 @@ shortform-video-procrastination-study/
 │
 ├── reports/
 │   ├── figures/
-│   │   ├── fig1_latency_vs_load.png
-│   │   ├── fig1_latency_vs_load.pdf
-│   │   ├── fig2_distribution_boxplot.png
-│   │   └── fig2_distribution_boxplot.pdf
+│   │   ├── fig1_procrastination_vs_viewing.png
+│   │   ├── fig1_procrastination_vs_viewing.pdf
+│   │   ├── fig2_viewing_vs_procrastination.png
+│   │   └── fig2_viewing_vs_procrastination.pdf
 │   ├── paper_section_4.md
 │   └── task3_report.md
 │
 └── src/
-    ├── aggregation.py
-    ├── analyze.py
-    ├── benchmark.py
-    ├── compare_benchmark.py
     ├── process_data.py
     └── visualize.py
-```
-
----
-## Quickstart & Reproducibility Guide
-
-### Option A — Conda (Recommended)
-
-Run the full analysis pipeline on the synthetic sample in **three commands**:
-
-```bash
-# 1. Clone the repository and enter directory
-git clone https://github.com/nuraiaben-dev/shortform-video-procrastination-study.git
-cd shortform-video-procrastination-study
-
-# 2. Create and activate environment
-conda env create -f environment.yml
-conda activate shortform-study
-# 3. Execute sample benchmark pipeline
-python src/benchmark.py --config configs/config.yaml
-```
-
-### Option B — Docker
-
-```bash
-# 1. Build the image
-docker build -t shortform-study .
-
-# 2. Run the pipeline inside the container
-docker run --rm -v "$PWD":/work shortform-study \
-    python src/analyze.py --config configs/config.yaml --input data/sample/sample_data.csv
-```
-
-**Expected output:** the script prints summary statistics, Spearman ρ with a directional p-value, and the incidence-rate-ratio model fit, and writes a log file to `results/run.log`.
-
----
-
-## Expected Results / Benchmark Table
-
-The table below summarises the **planned** metrics for the study. Actual values are placeholders — no empirical results are claimed at protocol stage.
-
-| Metric | Role | Formula / Definition | Collection Source | Expected Direction |
-|---|---|---|---|---|
-| Procrastination score **P** | Primary (RQ2 outcome) | Sum of 16-item Tuckman scale (reverse-coded) | Baseline questionnaire | — |
-| Mean daily viewing **X** | Primary (RQ2 predictor) | Total valid viewing minutes / valid diary days | 14-day diary + device | — |
-| Late-submission rate **R** | Primary (RQ3 outcome) | 100 × L / A, for A > 0 | Deadline log | — |
-| Spearman **ρs** | Primary (RQ2 effect) | Rank correlation between X and P | Derived | ρs > 0 (H1) |
-| Adjusted **IRR** | Primary (RQ3 effect) | exp(β) from Poisson/NegBinom with log(A) offset | Derived | IRR > 1 (H1) |
-| Diary completeness | Guardrail | 100 × valid days / 14 (≥ 10 required) | Diary | ≥ 71% |
-| Proxy discrepancy | Guardrail | Diary minutes vs. app minutes | Diary vs. device | Report only |
-| On-time rate | Guardrail (secondary) | 100 × (A − L) / A | Deadline log | — |
-
-**Baseline / Reference group:** Students reporting *neither* study-time viewing *nor* bedtime viewing (the "neither" pattern group). Continuous predictors X, S, B are the primary adjusted predictors.
-
----
-
-## Methodology Passport Card
-
-The full **Methodology Passport Card** (Task 2 submission document) is available at:
-
-📄 [`docs/methodology.md`](docs/methodology.md)
-
-It contains: research type, hypotheses H0/H1, variable matrix (independent / dependent / controlled), primary and guardrail metrics, and the baseline definition.
-
----
-
-## Reproducibility
-
-- Exact dependency versions are pinned in `environment.yml`.
-- All experiment parameters live in `configs/config.yaml`.
-- Random seeds for resampling are fixed in the config.
-- The analysis script is deterministic given the same inputs.
-- A reviewer-facing audit checklist is at [`docs/reproducibility_checklist.md`](docs/reproducibility_checklist.md).
-
----
-
-## Data & Privacy
-
-- **The real participant data (data/raw/real_data.csv) has been anonymized and pseudonymized via study IDs prior to analysis. The repository includes the processed aggregate metrics (data/processed/metrics_summary.csv) and generated figures, but does not contain any personally identifiable information (PII)..**
-- Participant records are pseudonymised via study IDs; contact information is stored separately.
-
----
-
-## Citation
-
-If you reference this protocol, please cite:
-
-```bibtex
-@misc{akniet2026shortform,
-  author       = {Akniet, Nuray},
-  title        = {The Impact of Short-Form Video Content on Student Procrastination
-                  and Academic Deadline Adherence: Research Protocol and Reproducible Pipeline},
-  year         = {2026},
-  publisher    = {GitHub},
-  howpublished = {\url{https://github.com/nuraiaben-dev/shortform-video-procrastination-study}},
-  note         = {Research protocol, no empirical findings claimed}
-}
-```
-
----
-
-## License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
-## References
-
-1. Tuckman, B. W. (1991). The Development and Concurrent Validity of the Procrastination Scale. *Educational and Psychological Measurement*, 51(2), 473–480. https://doi.org/10.1177/0013164491512022
-2. Microsoft Learn. Microsoft Threat Modeling Tool threats. https://learn.microsoft.com/azure/security/develop/threat-modeling-tool-threats
-3. FIRST. CVSS v4.0 User Guide. https://www.first.org/cvss/user-guide.html
-
-## Week 7 Benchmark
-
-The benchmark measures the execution time of
-`derive_participant_level` on the 10-row synthetic sample.
-CSV reading, file writing and console output are outside
-the timed section.
-
-### Run
-
-With the project environment installed:
-
-```bash
-conda activate shortform-study
-python src/benchmark.py --config configs/config.yaml
-```
-
-Settings are stored in `configs/config.yaml`.
-
-### Test results
-
-10 warm-up runs were excluded from summary statistics.
-All 100 measured runs completed successfully.
-
-| Metric | Value |
-|---|---:|
-| Successful runs | 100 |
-| Failed runs | 0 |
-| Mean | 3.520 ms |
-| Median | 3.516 ms |
-| p95 | 3.552 ms |
-| p99 | 3.566 ms |
-
-These timings describe one local test on synthetic data.
-They are not findings about student behaviour.
-Timings may differ across machines and runs.
-
-### Output files
-
-- `data/raw/test_run.jsonl`: individual measurements,
-  labelled as warm-up or measurement.
-- `data/raw/test_run_metadata.json`: environment and configuration.
-- `data/raw/test_run_summary.json`: summary statistics.
-
-Only synthetic benchmark outputs are committed.
-Real participant data must remain excluded from Git.
-
-## Task 3 Results and Discussion
-
-### Experimental setup
-We analyzed real survey data (`data/raw/real_data.csv`) containing 2,360 records of student behaviour. Data processing included cleaning missing values and dividing participants into two groups based on daily viewing time (`< 60 mins` and `>= 60 mins`). We calculated robust statistics (mean, median) and bootstrapped 95% confidence intervals (2,000 resamples, seed = 42). We also tracked a guardrail metric: the percentage of participants with a high procrastination score (> 50).
-
-### Results
-The table below summarises the findings:
-
-| Viewing Time Group | N (records) | Mean Score | Median Score | 95% CI (Bootstrap) | High Procrastination Rate (Guardrail) |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **< 60 mins** | 854 | 24.80 | 23.0 | [24.32, 25.29] | 0.35% |
-| **>= 60 mins** | 1506 | 43.10 | 44.0 | [42.55, 43.70] | 29.22% |
-
-**Key Findings:**
-1. Participants watching short-form videos for **60 minutes or more per day** show significantly higher procrastination scores. The non-overlapping confidence intervals confirm this difference is statistically robust.
-2. The guardrail metric reveals a dramatic difference: the rate of high procrastination is ~83 times higher in the `>= 60 mins` group.
-
-### Scientific figures
-The plots strictly follow scientific visualization standards (explicit axis units, 95% CI error bars, colorblind-safe palette, distinct markers):
-* ![Procrastination vs Viewing Time](reports/figures/fig1_procrastination_vs_viewing.png)
-* ![Correlation Plot](reports/figures/fig2_viewing_vs_procrastination.png)
-
-Vector exports: [Figure 1 PDF](reports/figures/fig1_procrastination_vs_viewing.pdf) | [Figure 2 PDF](reports/figures/fig2_viewing_vs_procrastination.pdf)
-
-### Domain model
-The component diagram and measurement boundaries are documented in [docs/domain_model.md](docs/domain_model.md).
-
-### Limitations
-The analysis is based on observational self-reported data. While a significant association exists, it does not imply causation. The dataset is limited to the survey sample and does not capture long-term behavioural changes.
