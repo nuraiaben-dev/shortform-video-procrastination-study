@@ -47,7 +47,7 @@ Open the repository in a browser. Tick each box. If **all 7 items** are checked,
 
 - [ ] A small synthetic sample (5–10 rows) exists under `data/sample/`.
 - [ ] The sample schema matches the columns the analysis script expects.
-- [ ] **No real participant data are committed** — only synthetic data.
+- [ ] The committed collected data (`data/raw/real_data.csv`) contain only pseudonymised study IDs, age and gender, with no names or contact details.
 
 **Where to look:** [`data/sample/sample_data.csv`](../data/sample/sample_data.csv)
 
@@ -75,7 +75,7 @@ Open the repository in a browser. Tick each box. If **all 7 items** are checked,
 
 ## ✅ 7. Repository hygiene is clean
 
-- [ ] `.gitignore` excludes `.venv/`, `__pycache__/`, `.ipynb_checkpoints/`, `*.log`, real data, and model weights.
+- [ ] `.gitignore` excludes `.venv/`, `__pycache__/`, `.ipynb_checkpoints/`, `*.log`, `results/`, and model weights.
 - [ ] No large binaries, no secrets, no `.env` files, no virtual environments committed.
 - [ ] `LICENSE` is present (MIT, Apache 2.0, or CC-BY 4.0).
 - [ ] Commit history is informative (each commit message describes the change).

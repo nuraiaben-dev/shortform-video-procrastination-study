@@ -6,7 +6,7 @@
 
 **Repository:** https://github.com/nuraiaben-dev/shortform-video-procrastination-study
 
-**Date:** October 2026
+**Date:** October–November 2026 (updated with collected data)
 
 ---
 
@@ -132,6 +132,26 @@ CPU/GPU usage, memory, FLOPs, and API latency are **excluded** — they are unre
 - Questionnaire version, codebook, blank diary, preprocessing rules, and analysis script are preserved.
 - Software environment and random seeds are pinned in `environment.yml` and `configs/config.yaml`.
 - Only disclosure-checked aggregate outputs or authorised deidentified datasets are shared.
+
+---
+
+## 8. Collected data and deviations from the protocol
+
+**Data collected.** 200 students, 14-day diary (10–14 valid days each), baseline Tuckman questionnaire, device screen time, and a daily task log (`data/raw/real_data.csv`, one row per participant-day).
+
+**Operational choices made when applying the protocol to these data**
+
+| Topic | Protocol | Applied |
+|---|---|---|
+| Unit of analysis | Participant | Participant-level table (one row per student); bootstrap resamples participants |
+| A (tasks due) | Eligible tasks with deadlines in the window | Sum of `tasks_planned` over valid days |
+| L (late tasks) | Submitted after the deadline or not submitted | Sum of max(`tasks_planned` − `tasks_completed`, 0); late and missed tasks both count. `deadline_status` is used for consistency checks only |
+| RQ3 model | Poisson / negative binomial, offset log A, adjusted for covariates | Poisson GLM with robust (HC1) standard errors, offset log A; Pearson dispersion reported. Workload, study year and sleep were **not collected**; a sensitivity model adds age and gender |
+| Reference group | "Neither" viewing pattern | Empty at participant level (nearly everyone viewed before bed on at least one day), so four descriptive groups use a *frequent* threshold of ≥ 50% of valid days; continuous S and B remain the primary predictors |
+| RQ1 | Estimates with 95% CI | Mean with percentile bootstrap CI (2,000 participant resamples, seed 42) |
+| High/low split | Not used | Not used (a day-level "< 60 / ≥ 60 min" split was removed from the notebook) |
+
+**Guardrails applied.** Diary completeness ≥ 10 of 14 days (all 200 participants passed); proxy discrepancy between diary and device minutes is reported, not used for exclusion.
 
 ---
 

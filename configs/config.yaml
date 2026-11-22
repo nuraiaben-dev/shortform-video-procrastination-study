@@ -6,17 +6,21 @@
 
 project:
   name: "shortform-video-procrastination-study"
-  version: "0.1.0"
+  version: "0.2.0"
   description: >
     Observational study of short-form video viewing, procrastination,
-    and academic deadline adherence. Analysis pipeline on synthetic sample.
+    and academic deadline adherence. Analysis of the collected diary data
+    (data/raw/real_data.csv); a synthetic 10-row sample is kept for
+    pipeline tests and the aggregation benchmark.
 
 # ---------- Data paths ----------
 data:
-  sample_path: "data/sample/sample_data.csv"
+  real_path: "data/raw/real_data.csv"          # collected data (pseudonymised)
+  sample_path: "data/sample/sample_data.csv"   # synthetic, for tests/benchmark
   raw_dir: "data/raw/"
   processed_dir: "data/processed/"
   results_dir: "results/"
+  figures_dir: "reports/figures/"
 
 # ---------- Observation window ----------
 observation:
@@ -24,30 +28,38 @@ observation:
   min_valid_days: 10          # Guardrail: minimum valid diary days for exposure analysis
   bedtime_window_minutes: 60  # "Before bedtime" definition window
 
-# ---------- Column mapping (matches sample_data.csv schema) ----------
+# ---------- Column mapping (matches real_data.csv and sample_data.csv) ----------
+# One row = one participant-day. P is constant within a participant.
 columns:
-  id: "study_id"
+  id: "participant_id"
+  date: "date"
+  age: "age"
+  gender: "gender"
   viewing_minutes: "viewing_minutes"
-  study_time_viewing: "study_time_viewing"   # 1 / 0
-  bedtime_viewing: "bedtime_viewing"         # 1 / 0
-  tuckman_score: "tuckman_score"
-  tasks_due: "tasks_due"
-  late_tasks: "late_tasks"
+  study_time_viewing: "viewing_during_study"    # 1 / 0 per day
+  bedtime_viewing: "viewing_before_bed"         # 1 / 0 per day
+  tuckman_score: "procrastination_score"        # 16-item Tuckman, range 16-64
+  tasks_due: "tasks_planned"                    # A: tasks with a deadline that day
+  tasks_completed: "tasks_completed"
+  deadline_status: "deadline_status"            # on_time / late / missed
+  screen_time_minutes: "screen_time_minutes"    # device proxy
+  diary_completed: "diary_completed"            # 1 = valid diary day
+  late_tasks: "late_tasks"                      # DERIVED: max(planned - completed, 0)
 
-# ---------- Variable derivations ----------
+# ---------- Variable derivations (participant level) ----------
 variables:
   X:  # Mean daily viewing time (min/day) = sum(viewing_minutes) / valid_days
     formula: "sum(viewing_minutes) / valid_days"
-  S:  # Study-time viewing proportion = count(study_time_viewing==1) / valid_days
-    formula: "sum(study_time_viewing) / valid_days"
-  B:  # Bedtime viewing proportion = count(bedtime_viewing==1) / valid_days
-    formula: "sum(bedtime_viewing) / valid_days"
-  P:  # Procrastination score (from questionnaire, one value per participant)
-    source: "tuckman_score"
-  L:  # Late tasks (count)
-    source: "late_tasks"
-  A:  # Tasks due (opportunity denominator)
-    source: "tasks_due"
+  S:  # Study-time viewing proportion = sum(viewing_during_study) / valid_days
+    formula: "sum(viewing_during_study) / valid_days"
+  B:  # Bedtime viewing proportion = sum(viewing_before_bed) / valid_days
+    formula: "sum(viewing_before_bed) / valid_days"
+  P:  # Procrastination score (questionnaire, one value per participant)
+    source: "procrastination_score"
+  L:  # Late tasks (count) = sum over days of max(planned - completed, 0)
+    source: "derived from tasks_planned and tasks_completed"
+  A:  # Tasks due (opportunity denominator) = sum(tasks_planned)
+    source: "tasks_planned"
 
 # ---------- Statistical analysis ----------
 analysis:
@@ -57,23 +69,28 @@ analysis:
   spearman:
     alternative: "greater"     # H1: rho > 0
   rq3_model:
-    primary: "poisson"         # Fallback: negative_binomial if overdispersed
-    fallback: "negative_binomial"
-    offset_column: "A"         # log(A) used as exposure offset
-    include_covariates: false  # Sample only has core predictors
+    primary: "poisson"         # log-link GLM with offset log(A), robust (HC1) SE
+    offset_column: "A"
+    dispersion_warning: 1.5    # Pearson chi2/df above this is reported as overdispersion
+    sensitivity_covariates: ["age", "gender"]   # protocol covariates not collected
+  descriptive_groups:
+    threshold: 0.5             # "frequent" = viewing on >= 50% of valid days
 
 # ---------- Reproducibility ----------
 reproducibility:
   random_seed: 42              # Fixed seed for any resampling
-  n_bootstrap: 1000            # For CI estimation if needed
+  n_bootstrap: 2000            # Participant-level bootstrap resamples
   log_file: "results/run.log"
 
 # ---------- Output ----------
 output:
   print_summary: true
   save_log: true
-  save_results_csv: false      # Not for the synthetic sample
+  save_results_csv: true
+  participant_table: "data/processed/real_participant_level.csv"   # one row per participant
+  results_table: "data/processed/real_results_summary.csv"         # aggregate, can be committed
 
+# ---------- Benchmark (synthetic sample only) ----------
 benchmark:
   warmup_runs: 10
   measured_runs: 100
@@ -87,7 +104,7 @@ comparison:
   input_path: "data/sample/sample_data.csv"
   output_path: "data/raw/comparison_run.jsonl"
 
-  # Advanced Research & Guardrail Settings
+# ---------- Guardrails ----------
 guardrails:
   min_valid_diary_days: 10
   strict_proxy_validation: true

@@ -1,13 +1,15 @@
 import pandas as pd
 
+from common import add_late_tasks
+
 
 def derive_participant_level_proposed(df, cfg):
     """Aggregate diary data with one groupby operation."""
     col = cfg["columns"]
 
     # Use the same filtering rule as the baseline.
-    data = df.copy()
-    data = data[data[col["viewing_minutes"]] >= 0]
+    data = df[df[col["viewing_minutes"]] >= 0]
+    data = add_late_tasks(data, cfg)
 
     result = (
         data.groupby(col["id"])
