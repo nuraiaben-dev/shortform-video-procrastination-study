@@ -3,9 +3,12 @@
 # video / procrastination study analysis pipeline.
 #
 # Build:  docker build -t shortform-study .
-# Run:    docker run --rm -v "$PWD":/work shortform-study \
+# Run (synthetic sample, works without the collected data):
+#         docker run --rm -v "$PWD":/work shortform-study \
 #             python src/analyze.py --config configs/config.yaml \
-#                                   --input data/sample/sample_data.csv
+#                                   --input data/sample/sample_data.csv --min-valid-days 1
+# Run (collected data, mount it at data/raw/real_data.csv):
+#         ... --input data/raw/real_data.csv --save
 # ============================================================
 
 # ---- Base image (pinned) ----
@@ -38,4 +41,5 @@ COPY . /work
 # ---- Default command: run the analysis on the sample data ----
 CMD ["python", "src/analyze.py", \
      "--config", "configs/config.yaml", \
-     "--input", "data/sample/sample_data.csv"]
+     "--input", "data/sample/sample_data.csv", \
+     "--min-valid-days", "1"]

@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3119/)
-[![Status: Protocol](https://img.shields.io/badge/status-protocol-orange.svg)](#)
+[![Status: Analysis](https://img.shields.io/badge/status-data%20analysis-orange.svg)](#)
 [![Reproducible](https://img.shields.io/badge/reproducibility-100%25-brightgreen.svg)](#reproducibility)
 
 **Authors:** Nuray Aben (nuraiaben-dev) & Akniet Abish (aknietabish-cpu)
@@ -11,13 +11,13 @@
 
 **Institution:** [Narxoz]  
 
-**Date:** October 2026
+**Date:** October–November 2026
 
 ---
 
 ## Overview & Research Aim
 
-This repository contains the research protocol, methodology passport card, and reproducible analysis pipeline for an observational study examining whether short-form video consumption (TikTok, Instagram Reels, YouTube Shorts) is associated with increased procrastination and reduced academic deadline adherence among university students.
+This repository contains the research protocol, methodology passport card, and reproducible analysis pipeline (including the analysis of the collected diary data) for an observational study examining whether short-form video consumption (TikTok, Instagram Reels, YouTube Shorts) is associated with increased procrastination and reduced academic deadline adherence among university students.
 
 **Research Question(s):**
 
@@ -29,11 +29,12 @@ This repository contains the research protocol, methodology passport card, and r
 
 **Study Design:** Mixed-Methods — primary quantitative observational design (14-day diary + questionnaire + device screen-time evidence), with optional qualitative follow-up interviews.
 
-**No empirical findings are claimed at this stage.** The repository contains the research protocol for the
-student procrastination study and completed synthetic-data
-benchmark results for Task 3. The benchmark results evaluate
-software performance and are not empirical findings about
-student behaviour.
+**Two kinds of results live here.** (1) The analysis of the collected 14-day diary data
+(200 students), reported in [Analysis of the collected data](#analysis-of-the-collected-data).
+The design is observational, so the findings are associations, not causal effects.
+(2) A synthetic-data benchmark of the aggregation code ([Week 7 Benchmark](#week-7-benchmark)
+and [Task 3 Results](#task-3-results-and-discussion)), which evaluates software performance
+only and says nothing about student behaviour.
 
 ---
 
@@ -75,15 +76,18 @@ shortform-video-procrastination-study/
 │
 ├── data/
 │   ├── sample/
-│   │   └── sample_data.csv
+│   │   └── sample_data.csv            # synthetic, 10 rows
 │   ├── raw/
-│   │   ├── test_run.jsonl
+│   │   ├── real_data.csv              # collected data (pseudonymised)
+│   │   ├── test_run.jsonl             # benchmark logs (synthetic)
 │   │   ├── test_run_metadata.json
 │   │   ├── test_run_summary.json
 │   │   ├── comparison_run.jsonl
 │   │   └── comparison_run_metadata.json
 │   └── processed/
-│       └── metrics_summary.csv
+│       ├── metrics_summary.csv        # benchmark statistics
+│       ├── real_results_summary.csv   # aggregate results, collected data
+│       └── real_participant_level.csv # one row per participant
 │
 ├── docs/
 │   ├── methodology.md
@@ -91,24 +95,25 @@ shortform-video-procrastination-study/
 │   └── reproducibility_checklist.md
 │
 ├── notebooks/
-│   └── 01_data_analysis.ipynb
+│   └── 01_data_analysis.ipynb         # analysis of the collected data
 │
 ├── reports/
 │   ├── figures/
-│   │   ├── fig1_latency_vs_load.png
-│   │   ├── fig1_latency_vs_load.pdf
-│   │   ├── fig2_distribution_boxplot.png
-│   │   └── fig2_distribution_boxplot.pdf
+│   │   ├── real_fig1_viewing_vs_procrastination.{png,pdf}
+│   │   ├── real_fig2_irr_forest.{png,pdf}
+│   │   ├── fig1_latency_vs_load.{png,pdf}        # benchmark
+│   │   └── fig2_distribution_boxplot.{png,pdf}   # benchmark
 │   ├── paper_section_4.md
-│   └── task3_report.md
+│   └── task3_report.md                # benchmark report
 │
 └── src/
-    ├── aggregation.py
-    ├── analyze.py
+    ├── common.py                      # shared helpers (late-task derivation)
+    ├── analyze.py                     # validation, X/S/B/P/L/A, RQ1-RQ3
+    ├── aggregation.py                 # one-pass aggregation (benchmark)
     ├── benchmark.py
     ├── compare_benchmark.py
-    ├── process_data.py
-    └── visualize.py
+    ├── process_data.py                # benchmark statistics
+    └── visualize.py                   # benchmark figures
 ```
 
 ---
@@ -116,7 +121,7 @@ shortform-video-procrastination-study/
 
 ### Option A — Conda (Recommended)
 
-Run the full analysis pipeline on the synthetic sample in **three commands**:
+Run the pipeline in a few commands (the collected data are in `data/raw/real_data.csv`):
 
 ```bash
 # 1. Clone the repository and enter directory
@@ -126,7 +131,13 @@ cd shortform-video-procrastination-study
 # 2. Create and activate environment
 conda env create -f environment.yml
 conda activate shortform-study
-# 3. Execute sample benchmark pipeline
+# 3. Analyse the collected data (RQ1-RQ3, guardrails) and save the tables
+python src/analyze.py --config configs/config.yaml --input data/raw/real_data.csv --save
+
+# 4. Or smoke-test the same pipeline on the synthetic sample (no real data needed)
+python src/analyze.py --config configs/config.yaml --input data/sample/sample_data.csv --min-valid-days 1
+
+# 5. Aggregation benchmark (synthetic sample only)
 python src/benchmark.py --config configs/config.yaml
 ```
 
@@ -138,16 +149,16 @@ docker build -t shortform-study .
 
 # 2. Run the pipeline inside the container
 docker run --rm -v "$PWD":/work shortform-study \
-    python src/analyze.py --config configs/config.yaml --input data/sample/sample_data.csv
+    python src/analyze.py --config configs/config.yaml --input data/sample/sample_data.csv --min-valid-days 1
 ```
 
-**Expected output:** the script prints summary statistics, Spearman ρ with a directional p-value, and the incidence-rate-ratio model fit, and writes a log file to `results/run.log`.
+**Expected output:** the script prints the data-quality report, descriptive estimates, the Spearman ρ with a directional p-value, the incidence-rate-ratio model and the viewing-pattern groups, and writes a log file to `results/run.log`. With `--save` it also writes `data/processed/real_results_summary.csv` and `data/processed/real_participant_level.csv`.
 
 ---
 
 ## Expected Results / Benchmark Table
 
-The table below summarises the **planned** metrics for the study. Actual values are placeholders — no empirical results are claimed at protocol stage.
+The table below summarises the metrics defined in the protocol. Estimated values for the collected data are in [Analysis of the collected data](#analysis-of-the-collected-data).
 
 | Metric | Role | Formula / Definition | Collection Source | Expected Direction |
 |---|---|---|---|---|
@@ -186,9 +197,11 @@ It contains: research type, hypotheses H0/H1, variable matrix (independent / dep
 
 ## Data & Privacy
 
-- **No real participant data are stored in this repository.** Only a synthetic `data/sample/sample_data.csv` (10 rows) is committed for pipeline testing.
-- Real data (if collected in the future) will be stored under `data/raw/` and `data/processed/`, both excluded via `.gitignore`.
-- Participant records are pseudonymised via study IDs; contact information is stored separately.
+- The collected diary data (`data/raw/real_data.csv`, 200 participants, 14 days, one row per participant-day) are published in this repository so that the analysis can be reproduced. They were collected following the protocol in [`docs/methodology.md`](docs/methodology.md) (informed consent, random study IDs).
+- The file contains only pseudonymised study IDs (`P001`…), age, gender and diary/questionnaire values. Names, contact information and the ID-to-person key are stored separately and never enter the repository.
+- Please do not attempt to re-identify participants.
+- A synthetic `data/sample/sample_data.csv` (10 rows) is included for pipeline testing and the aggregation benchmark.
+- Derived outputs (`data/processed/real_participant_level.csv`, `data/processed/real_results_summary.csv`) and figures are produced by `src/analyze.py` and the notebook.
 
 ---
 
@@ -204,7 +217,7 @@ If you reference this protocol, please cite:
   year         = {2026},
   publisher    = {GitHub},
   howpublished = {\url{https://github.com/nuraiaben-dev/shortform-video-procrastination-study}},
-  note         = {Research protocol, no empirical findings claimed}
+  note         = {Research protocol and analysis of diary data}
 }
 ```
 
@@ -221,6 +234,35 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 1. Tuckman, B. W. (1991). The Development and Concurrent Validity of the Procrastination Scale. *Educational and Psychological Measurement*, 51(2), 473–480. https://doi.org/10.1177/0013164491512022
 2. Microsoft Learn. Microsoft Threat Modeling Tool threats. https://learn.microsoft.com/azure/security/develop/threat-modeling-tool-threats
 3. FIRST. CVSS v4.0 User Guide. https://www.first.org/cvss/user-guide.html
+
+## Analysis of the collected data
+
+**Data.** 200 students, 2,360 participant-days (10–14 valid diary days each; no participant or day was excluded). The unit of analysis is the **participant**: the procrastination score is measured once per student, so the 2,360 days are aggregated to one row per participant before any test, and bootstrap intervals resample participants.
+
+| Question | Result (95% CI) |
+|---|---|
+| RQ1: mean daily viewing X | 73.1 (69.5–76.7) min/day |
+| RQ1: mean Tuckman score P | 36.5 (34.7–38.3) points |
+| RQ1: late-task rate | 23.9 (22.0–25.8) % |
+| RQ2: Spearman ρ (X vs P), one-sided | 0.97 (0.96–0.98), p < 0.001 |
+| RQ3a: IRR for study-time viewing S (Holm p < 0.001) | 1.75 (1.26–2.42) |
+| RQ3b: IRR for bedtime viewing B (Holm p = 0.18) | 1.17 (0.83–1.64) |
+| IRR per +100 min/day of viewing | 3.66 (2.73–4.91) |
+
+Daily viewing and procrastination are strongly positively associated (H1 for RQ2 supported). Viewing during study time is associated with more late tasks; bedtime viewing is not clearly associated. The association is unusually strong, so the measurement of X and P should be discussed when reporting. The data are observational, so these are associations, not causal effects. Limitations (convenience sample, protocol covariates not collected, derivation of late tasks) are listed in the notebook.
+
+![Viewing time and procrastination](reports/figures/real_fig1_viewing_vs_procrastination.png)
+
+![Incidence-rate ratios for late tasks](reports/figures/real_fig2_irr_forest.png)
+
+**Reproduce:**
+
+```bash
+python src/analyze.py --config configs/config.yaml --input data/raw/real_data.csv --save
+jupyter notebook notebooks/01_data_analysis.ipynb
+```
+
+Artifacts: [executed notebook](notebooks/01_data_analysis.ipynb), [aggregate results](data/processed/real_results_summary.csv), [domain model](docs/domain_model.md), [methodology](docs/methodology.md).
 
 ## Week 7 Benchmark
 
@@ -266,9 +308,11 @@ Timings may differ across machines and runs.
 - `data/raw/test_run_summary.json`: summary statistics.
 
 Only synthetic benchmark outputs are committed.
-Real participant data must remain excluded from Git.
+Benchmark outputs use the synthetic sample only.
 
 ## Task 3 Results and Discussion
+
+*Performance benchmark of the aggregation step. All data in this section are synthetic.*
 
 ### Experimental setup
 
@@ -320,10 +364,7 @@ After installing and activating the project environment:
 ```bash
 python src/process_data.py
 python src/visualize.py
-jupyter notebook notebooks/01_data_analysis.ipynb
 ```
-
-The notebook is saved with sequentially executed cells and visible outputs.
 
 To collect a new comparison log:
 
@@ -336,10 +377,10 @@ visualization afterwards; numerical results may differ.
 
 ### Domain model
 
-See the [component diagram and measurement boundaries](docs/domain_model.md).
+See the [study domain model, analysis pipeline and benchmark measurement boundaries](docs/domain_model.md).
 ### Limitations
 
-The experiment used one computer and repeated synthetic sample data.
+The benchmark used one computer and repeated synthetic sample data.
 Increasing workload size increased both row count and participant-group
 count. Their effects were not isolated.
 
@@ -348,12 +389,11 @@ within-session uncertainty under an independent-run assumption.
 They do not capture differences across machines or separate sessions.
 With 100 measurements per group, p99 estimates are approximate.
 
-These results evaluate software performance. They do not test the
-behavioural hypotheses about short-form videos and student procrastination.
+These benchmark results evaluate software performance. The behavioural hypotheses
+are tested in [Analysis of the collected data](#analysis-of-the-collected-data).
 
 ### Analysis artifacts
 
-- [Executed notebook](notebooks/01_data_analysis.ipynb)
 - [Full statistical summary](data/processed/metrics_summary.csv)
 - [Comparison measurements](data/raw/comparison_run.jsonl)
 - [Experiment metadata](data/raw/comparison_run_metadata.json)

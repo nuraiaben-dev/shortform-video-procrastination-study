@@ -14,12 +14,9 @@ ENV/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# Data — никогда не коммитим реальные данные участников
-data/raw/
-data/processed/
+# The collected, pseudonymised diary data (data/raw/real_data.csv) and the
+# derived tables in data/processed/ ARE committed so the analysis is reproducible.
 data/interim/
-*.csv
-!data/sample/*.csv
 
 # Logs and results
 *.log
